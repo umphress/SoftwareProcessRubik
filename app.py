@@ -30,7 +30,7 @@ def default():
 @app.route('/about')
 def about():
     '''Return author information'''
-    return str(getAuthor())
+    return str(_getAuthor())
 
 #-----------------------------------
 #  The following code is invoked when the path portion of the URL matches
@@ -43,7 +43,7 @@ def about():
 def solveServer():
     '''Return face rotation solution set'''
     try:
-        userParms = parseParms(request.args)
+        userParms = _parseParms(request.args)
         result = solve(userParms)
         print("Response -->", str(result))
         return str(result)
@@ -60,7 +60,7 @@ def solveServer():
 def rotateServer():
     '''Return rotated cube'''
     try:
-        userParms = parseParms(request.args)
+        userParms = _parseParms(request.args)
         result = rotate(userParms)
         print("Response -->", str(result))
         return str(result)
@@ -69,7 +69,7 @@ def rotateServer():
 
 #-----------------------------------
 #  URL parsing support code
-def parseParms(queryString):
+def _parseParms(queryString):
     '''Convert URL query string items into dictionary form'''
     userParms = {}
     for key in queryString:
@@ -79,9 +79,9 @@ def parseParms(queryString):
 #-----------------------------------
 #  SBOM support code
 #
-def getAuthor():
+def _getAuthor(sbomDirectory = ''):
     '''Return author information from SBOM'''
-    with open("sbom.json", encoding="utf-8") as sbomFile:
+    with open(os.path.join(sbomDirectory,"sbom.json"), encoding="utf-8") as sbomFile:
         parsedSbom = json.load(sbomFile)
     sbomComponents = parsedSbom["components"]
     author = "unknown"
